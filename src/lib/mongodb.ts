@@ -25,7 +25,7 @@ export async function connectMongo() {
 
   if (!mongooseCache.promise) {
     mongooseCache.promise = mongoose.connect(uri, {
-      dbName: "mutual-fund-tracker",
+      dbName: "RootWealth",
     });
   }
 

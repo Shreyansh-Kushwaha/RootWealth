@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Portfolio from "@/models/Portfolio";
 import { connectMongo } from "@/lib/mongodb";
 import { simulatePortfolio } from "@/lib/simulation";
+import { getCurrentUser } from "@/lib/auth";
 import type { PortfolioCreatePayload, PortfolioDocument } from "@/types";
 
 function serializeDocument(doc: PortfolioDocument) {
@@ -16,7 +17,12 @@ function serializeDocument(doc: PortfolioDocument) {
 
 export async function GET() {
   await connectMongo();
-  const portfolios = await Portfolio.find({}).sort({ startDate: -1 }).lean();
+  const user = await getCurrentUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+
+  const portfolios = await Portfolio.find({ userId: user.id }).sort({ startDate: -1 }).lean();
   const results = await Promise.all(
     portfolios.map(async (portfolio) => {
       const simulation = await simulatePortfolio(portfolio as PortfolioCreatePayload);
@@ -28,6 +34,11 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   await connectMongo();
+  const user = await getCurrentUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
+
   const body = (await request.json()) as PortfolioCreatePayload;
 
   if (!body.fundName || !body.schemeCode || !body.investmentType || !body.amount || !body.startDate) {
@@ -47,6 +58,7 @@ export async function POST(request: NextRequest) {
       sipDate: body.sipDate,
       startDate: new Date(body.startDate),
       isActive: true,
+      userId: user.id,
     });
     return NextResponse.json(portfolio, { status: 201 });
   } catch {

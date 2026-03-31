@@ -46,6 +46,8 @@ export default function HomePage() {
   const [xirr, setXirr] = useState<number | null>(null);
   const [xirrMessage, setXirrMessage] = useState<string | null>(null);
   const [xirrLoading, setXirrLoading] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   const [mounted, setMounted] = useState(false);
   const { register, handleSubmit, watch, reset, setValue } = useForm<NewInvestmentForm>({
@@ -80,7 +82,7 @@ export default function HomePage() {
     const preferDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
     const initialTheme = storedTheme ?? (preferDark ? "dark" : "light");
     setTheme(initialTheme);
-    refreshData();
+    fetchUser();
     setMounted(true);
   }, []);
 
@@ -118,6 +120,28 @@ export default function HomePage() {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function fetchUser() {
+    setAuthLoading(true);
+    try {
+      const response = await fetch("/api/auth/me");
+      const data = await response.json();
+      if (data?.authenticated) {
+        setUserEmail(data.email ?? null);
+        await refreshData();
+      } else {
+        setUserEmail(null);
+        setPortfolios([]);
+        setTaxHarvest(null);
+        setXirr(null);
+      }
+    } catch (error) {
+      console.error(error);
+      setUserEmail(null);
+    } finally {
+      setAuthLoading(false);
     }
   }
 
@@ -196,6 +220,14 @@ export default function HomePage() {
     await refreshData();
   }
 
+  async function logout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setUserEmail(null);
+    setPortfolios([]);
+    setTaxHarvest(null);
+    setXirr(null);
+  }
+
   async function checkOverlap() {
     if (!selectedA || !selectedB) {
       setOverlapResult(null);
@@ -242,8 +274,37 @@ export default function HomePage() {
                 <RefreshCcw className="h-4 w-4" />
                 Refresh data
               </button>
+              {userEmail ? (
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="inline-flex items-center gap-2 rounded-full border border-surface bg-surface px-4 py-3 text-sm font-semibold text-[color:var(--foreground)] shadow-sm transition hover:border-rose-400 hover:text-rose-600"
+                >
+                  Logout
+                </button>
+              ) : (
+                <a
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-full bg-[color:var(--accent)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[color:var(--accent)]/90"
+                >
+                  Login
+                </a>
+              )}
             </div>
           </div>
+
+          {!authLoading && !userEmail && (
+            <div className="mt-6 rounded-3xl border border-rose-200 bg-rose-50 p-5 text-center text-sm text-rose-900">
+              <p className="font-semibold text-rose-900">Your portfolio is private and requires login.</p>
+              <p className="mt-2 text-[0.95rem] text-rose-700">Sign in to view your own SIP investments, tax harvest suggestions, and XIRR analytics.</p>
+              <a
+                href="/login"
+                className="mt-4 inline-flex items-center justify-center rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700"
+              >
+                Go to login
+              </a>
+            </div>
+          )}
 
           <div className="mt-8 grid gap-4 lg:grid-cols-5">
             <div className="rounded-3xl bg-surface p-5">

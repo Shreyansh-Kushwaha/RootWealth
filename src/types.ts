@@ -8,6 +8,7 @@ export interface PortfolioCreatePayload {
   sipDate?: number;
   startDate: string;
   isActive?: boolean;
+  userId?: string;
 }
 
 export interface PortfolioDocument extends PortfolioCreatePayload {
@@ -15,6 +16,7 @@ export interface PortfolioDocument extends PortfolioCreatePayload {
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
+  userId: string;
 }
 
 export interface PurchaseEntry {

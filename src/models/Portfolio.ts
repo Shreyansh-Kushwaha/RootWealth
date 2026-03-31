@@ -9,6 +9,7 @@ const PortfolioSchema = new mongoose.Schema(
     sipDate: { type: Number, min: 1, max: 31 },
     startDate: { type: Date, required: true },
     isActive: { type: Boolean, default: true },
+    userId: { type: String, required: true, index: true },
   },
   { timestamps: true }
 );

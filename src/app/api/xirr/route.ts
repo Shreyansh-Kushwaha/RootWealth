@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Portfolio from "@/models/Portfolio";
 import { connectMongo } from "@/lib/mongodb";
+import { getCurrentUser } from "@/lib/auth";
 import { buildXirrCashFlows, calculateXirr } from "@/lib/xirr";
 import type { PortfolioCreatePayload } from "@/types";
 
@@ -8,7 +9,12 @@ export async function GET() {
   await connectMongo();
 
   try {
-    const portfolios = await Portfolio.find({ isActive: true }).lean();
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    const portfolios = await Portfolio.find({ isActive: true, userId: user.id }).lean();
     const cashFlows = await buildXirrCashFlows(portfolios as PortfolioCreatePayload[]);
     const result = calculateXirr(cashFlows);
     const totalCurrentValue = cashFlows
