@@ -248,8 +248,36 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-[color:var(--background)] px-4 py-6 text-[color:var(--foreground)] sm:px-8">
       <div className="mx-auto max-w-7xl">
-        <section className="mb-8 rounded-3xl border border-surface bg-surface p-6 shadow-sm">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
+          <aside className="hidden rounded-3xl border border-surface bg-surface p-6 shadow-sm lg:block">
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted">Navigation</p>
+                <h2 className="mt-2 text-xl font-semibold text-primary">RootWealth</h2>
+              </div>
+              <nav className="space-y-2">
+                <a href="/" className="block rounded-2xl border border-surface bg-[color:var(--card)] px-4 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)]">
+                  Dashboard
+                </a>
+                <a href="/sips" className="block rounded-2xl border border-surface bg-[color:var(--surface)] px-4 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)]">
+                  SIP analytics
+                </a>
+                <a href="/search" className="block rounded-2xl border border-surface bg-[color:var(--accent)]/10 px-4 py-3 text-sm font-semibold text-[color:var(--accent)] transition hover:bg-[color:var(--accent)]/15">
+                  Fund search
+                </a>
+                <a href="/login" className="block rounded-2xl border border-surface bg-[color:var(--surface)] px-4 py-3 text-sm font-semibold text-[color:var(--foreground)] transition hover:border-[color:var(--accent)]">
+                  Login / account
+                </a>
+              </nav>
+              <div className="rounded-3xl border border-surface bg-[color:var(--card)] p-4 text-sm text-muted">
+                <p className="font-semibold text-primary">TIP</p>
+                <p className="mt-2">Use SIP analytics to review contribution cadence and monitor the tax-adjusted value over time.</p>
+              </div>
+            </div>
+          </aside>
+          <div>
+            <section className="mb-8 rounded-3xl border border-surface bg-surface p-6 shadow-sm">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted">Mutual Fund Tracker</p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight text-primary">Privacy-first investor dashboard</h1>
@@ -650,6 +678,8 @@ export default function HomePage() {
             </div>
           </section>
         </section>
+          </div>
+        </div>
       </div>
     </main>
   );
