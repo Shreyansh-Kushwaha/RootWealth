@@ -41,4 +41,4 @@ npm run dev
 
 - The app uses `mfapi.in` for historical NAV data.
 - Overlap detection uses mocked holdings for MVP results.
-- Make sure your MongoDB URI is valid before starting the app.
+
