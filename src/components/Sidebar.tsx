@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { name: "Dashboard", icon: <LayoutGrid size={20} />, href: "/" },
+  { name: "Dashboard", icon: <LayoutGrid size={20} />, href: "/dashboard" },
   { name: "SIP analytics", icon: <TrendingUp size={20} />, href: "/sips" },
   { name: "Fund search", icon: <Search size={20} />, href: "/search" },
 ];
@@ -22,20 +22,21 @@ export default function Sidebar({ expanded, setExpanded }: { expanded: boolean; 
 
   return (
     <aside
-      // FIX: Changed border-[color:var(--surface)] to border-2 border-[color:var(--accent)]
       className={`hidden h-screen flex-col justify-between rounded-3xl border-2 border-[color:var(--accent)] bg-[color:var(--surface)] p-4 shadow-sm transition-all duration-300 ease-in-out lg:flex ${
         expanded ? "w-64" : "w-20"
       }`}
     >
       <div>
         <div className={`flex items-center pb-6 ${expanded ? "justify-between" : "justify-center"}`}>
-          <h2
-            className={`overflow-hidden text-xl font-bold text-primary transition-all duration-300 ${
-              expanded ? "w-32 opacity-100" : "w-0 opacity-0"
-            }`}
-          >
-            RootWealth
-          </h2>
+          <Link href="/">
+            <h2
+              className={`overflow-hidden text-xl font-bold text-primary transition-all duration-300 hover:text-[color:var(--accent)] ${
+                expanded ? "w-32 opacity-100" : "w-0 opacity-0"
+              }`}
+            >
+              RootWealth
+            </h2>
+          </Link>
           <button
             onClick={() => setExpanded(!expanded)}
             className="flex items-center justify-center rounded-lg p-2 text-muted transition-colors hover:bg-[color:var(--card)] hover:text-primary focus:outline-none"
@@ -52,10 +53,10 @@ export default function Sidebar({ expanded, setExpanded }: { expanded: boolean; 
               href={item.href}
               className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 pathname === item.href
-                  ? "bg-[color:var(--accent)] text-white"
+                  ? "bg-[color:var(--accent)] text-adaptive-accent" 
                   : "text-muted hover:bg-[color:var(--card)] hover:text-primary"
               } ${expanded ? "justify-start" : "justify-center"}`}
-            >
+              >
               <span className="flex items-center justify-center">{item.icon}</span>
               <span className={`transition-all duration-300 ${expanded ? "block opacity-100" : "hidden opacity-0"}`}>
                 {item.name}
@@ -66,17 +67,18 @@ export default function Sidebar({ expanded, setExpanded }: { expanded: boolean; 
       </div>
 
       <div className="border-t border-[color:var(--surface)] pt-4">
+        {/* Comment safely placed outside the tag */}
         <Link
           href="/login"
           className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
             pathname === "/login"
-              ? "bg-[color:var(--accent)] text-white"
+              ? "bg-[color:var(--accent)] text-adaptive-accent"
               : "text-muted hover:bg-[color:var(--card)] hover:text-primary"
           } ${expanded ? "justify-start" : "justify-center"}`}
         >
           <span className="flex items-center justify-center"><User size={20} /></span>
           <span className={`transition-all duration-300 ${expanded ? "block opacity-100" : "hidden opacity-0"}`}>
-            Login / Account
+            Log Out
           </span>
         </Link>
       </div>

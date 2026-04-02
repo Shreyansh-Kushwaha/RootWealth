@@ -30,7 +30,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/");
+      router.push("/dashboard");
     } catch (err) {
       setError("Unable to connect to the server.");
     } finally {

@@ -10,6 +10,7 @@
   --accent: #0f766e;
   --danger: #dc2626;
   --warning: #f59e0b;
+  --accent-text: #ffffff;
 }
 
 html[data-theme='dark'] {
@@ -23,6 +24,20 @@ html[data-theme='dark'] {
   --accent: #2dd4bf;
   --danger: #fb7185;
   --warning: #fbbf24;
+  --accent: #2dd4bf;
+  --accent-text: #000000;
+}
+
+/* Default text selection for light mode (optional) */
+::selection {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+/* Text selection specifically for Dark Mode */
+html[data-theme='dark'] ::selection {
+  background-color: #2dd4bf; /* Your blue color (Tailwind blue-500) */
+  color: #020202; /* Forces the text to be black */
 }
 
 @theme inline {
@@ -30,6 +45,7 @@ html[data-theme='dark'] {
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-accent-text: var(--accent-text);
 }
 
 body {
@@ -92,6 +108,15 @@ html[data-theme='dark'] *::-webkit-scrollbar-thumb {
 
 .text-warning {
   color: var(--warning);
+}
+
+/* Custom class for buttons that sit on top of the accent color */
+.text-adaptive-accent {
+  color: #f8f8f8 !important; /* Forces White in Light Mode */
+}
+
+html[data-theme='dark'] .text-adaptive-accent {
+  color: #020202 !important; /* Forces Black in Dark Mode */
 }
 
 button,
